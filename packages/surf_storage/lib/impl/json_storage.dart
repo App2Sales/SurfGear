@@ -17,9 +17,7 @@ import 'package:surf_storage/base/storage.dart';
 
 /// Based on [LocalStorage] simple json storage
 class JsonStorage implements Storage<String, Map<String, dynamic>> {
-  JsonStorage(String filename)
-      : assert(filename != null),
-        _storage = LocalStorage(filename);
+  JsonStorage(String filename) : _storage = LocalStorage(filename);
 
   final LocalStorage _storage;
 
@@ -27,10 +25,10 @@ class JsonStorage implements Storage<String, Map<String, dynamic>> {
   void clear() => _storage.ready.then((_) => _storage.clear());
 
   @override
-  Future<Map<String, dynamic>> get(String key) async {
+  Future<Map<String, dynamic>?> get(String key) async {
     await _storage.ready;
 
-    final value = _storage.getItem(key) as Map;
+    final Map? value = _storage.getItem(key) as Map;
     return value != null ? Map<String, dynamic>.from(value) : null;
   }
 
@@ -39,6 +37,5 @@ class JsonStorage implements Storage<String, Map<String, dynamic>> {
       _storage.ready.then((_) => _storage.setItem(key, value));
 
   @override
-  void remove(String key) =>
-      _storage.ready.then((_) => _storage.deleteItem(key));
+  void remove(String key) => _storage.ready.then((_) => _storage.deleteItem(key));
 }

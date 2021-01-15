@@ -19,10 +19,12 @@ import 'package:flutter/material.dart';
 import 'package:surf_storage/base/storage.dart';
 import 'package:surf_storage/impl/json_storage.dart';
 
+import 'counter.dart';
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -47,7 +49,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({
+    required this.title,
+    Key? key,
+  }) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -67,9 +72,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   static const _counterKey = 'counter';
 
-  Counter _currentValue;
-  StreamController<Counter> _counterController;
-  Stream<Counter> _counterStream;
+  Counter _currentValue = const Counter();
+  late StreamController<Counter> _counterController;
+  late Stream<Counter> _counterStream;
 
   final Storage _storage = JsonStorage('jsonStorageExample');
 
@@ -84,9 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .get(_counterKey)
         // ignore: avoid_annotating_with_dynamic
         .then((dynamic json) {
-          return json == null
-              ? const Counter()
-              : Counter.fromJson(json as Map<String, Object>);
+          return json == null ? const Counter() : Counter.fromJson(json as Map<String, Object>);
         })
         .then((counter) => _currentValue = counter)
         .then(_counterController.add);
@@ -148,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
               initialData: const Counter(),
               builder: (context, snapshot) {
                 return Text(
-                  '${snapshot.data.value}',
+                  '${snapshot.data?.value ?? ''}',
                   style: Theme.of(context).textTheme.headline4,
                 );
               },
@@ -159,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
