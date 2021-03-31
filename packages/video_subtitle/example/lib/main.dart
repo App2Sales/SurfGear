@@ -14,7 +14,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:video_player/video_player.dart';
+import 'package:video_player_header/video_player_header.dart';
 import 'package:video_subtitle/video_subtitle.dart';
 
 const videoUrl =
@@ -87,8 +87,8 @@ class _AppState extends State<App> {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: VideoSubtitle.asset(
-                'assets/subtitle.srt',
+              child: VideoSubtitle.network(
+                'https://github.com/andreyvit/subtitle-tools/blob/master/sample.srt',
                 videoController: _videoController,
                 builder: (context, subtitle) => Text(
                   subtitle,

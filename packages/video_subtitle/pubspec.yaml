@@ -7,9 +7,13 @@ dependencies:
   flutter:
     sdk: flutter
   pedantic: ^1.9.0
-  video_player: ">=0.10.11+1 <2.0.0"
+  # video_player: ">=0.10.11+1 <2.0.0"
   srt_parser: ^1.1.0+5
   http: ^0.12.1
+  video_player_header:
+    git:
+      url: https://github.com/App2Sales/videoPlayerWithHeader.git
+      ref: master
 
 dev_dependencies:
   flutter_test:
