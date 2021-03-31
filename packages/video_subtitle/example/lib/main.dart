@@ -41,6 +41,10 @@ class _AppState extends State<App> {
     });
   }
 
+  bool showSub1 = true;
+  String sub =
+      'https://firebasestorage.googleapis.com/v0/b/o-mensageiro.appspot.com/o/sub%2Fsubtitle.srt?alt=media&token=cbf7fdee-c43e-4ac1-90b5-1481abfa1bac';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,6 +52,26 @@ class _AppState extends State<App> {
         appBar: _buildAppBar(),
         body: _buildBody(),
         floatingActionButton: _buildFab(),
+        persistentFooterButtons: [
+          InkWell(
+            child: Text('Mudar Legenda ${showSub1 ? 'SUB 1' : 'SUB 2'}'),
+            onTap: () {
+              final sub1 = showSub1
+                  ? 'https://firebasestorage.googleapis.com/v0/b/o-mensageiro.appspot.com/o/sub%2Fsubtitle.srt?alt=media&token=cbf7fdee-c43e-4ac1-90b5-1481abfa1bac'
+                  : 'https://firebasestorage.googleapis.com/v0/b/o-mensageiro.appspot.com/o/sub%2Fsubtitle2.srt?alt=media&token=0b4d24cb-d286-4b25-bad3-46a206a73b50';
+              setState(() {
+                showSub1 = !showSub1;
+                sub = sub1;
+              });
+
+              final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
+
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              Scaffold.of(context).showSnackBar(snackBar);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -88,11 +112,21 @@ class _AppState extends State<App> {
             Align(
               alignment: Alignment.bottomCenter,
               child: VideoSubtitle.network(
-                'https://github.com/andreyvit/subtitle-tools/blob/master/sample.srt',
+                sub,
                 videoController: _videoController,
                 builder: (context, subtitle) => Text(
                   subtitle,
-                  style: const TextStyle(fontSize: 18, color: Colors.white),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.amber,
+                    shadows: <Shadow>[
+                      Shadow(
+                        offset: Offset(0.0, 0.0),
+                        blurRadius: 3.0,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -135,6 +135,18 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(VideoSubtitle oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.url != widget.url) {
+      _initListeners();
+      _getSubtitles().then((subtitles) {
+        _subtitles = subtitles;
+        setState(() {});
+      });
+    }
+  }
+
   void _initListeners() {
     _videoControllerListener = () {
       if (_isPlayTaped) {
@@ -146,6 +158,7 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
         // Nothing
       }
     };
+
     _videoController.addListener(_videoControllerListener);
   }
 
@@ -160,9 +173,16 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
         final List<Subtitle> subtitles = parseSrt(subtitleStr);
         return subtitles;
       case SubtitleSource.network:
-        final http.Response response = await http.get(widget.url);
-        final List<Subtitle> subtitles = parseSrt(response.body);
-        return subtitles;
+        final http.Response response = await http.get(widget.url,
+            headers: {'charset': 'utf-8', 'Accept-Charset': 'utf-8'});
+        if (response.statusCode == 200) {
+          final List<Subtitle> subtitles =
+              parseSrt(utf8.decode(response.bodyBytes));
+          return subtitles;
+        } else {
+          return [];
+        }
+        break;
       case SubtitleSource.file:
         final String content = await _subtitleFile.readAsString(encoding: utf8);
         assert(content != null && content.isNotEmpty);
@@ -257,5 +277,13 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
     if (_subtitles.length - 1 == index) return null;
 
     return _subtitles[index + 1];
+  }
+
+  Subtitle _getPreviousSubtitle(Subtitle subtitle) {
+    final int index = _subtitles.indexOf(subtitle);
+
+    if (_subtitles.length - 1 == index || index < 0) return null;
+
+    return _subtitles[index - 1];
   }
 }
