@@ -117,10 +117,10 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
     super.initState();
 
     _initListeners();
-    _getSubtitles().then((subtitles) {
-      _subtitles = subtitles;
-      setState(() {});
-    });
+    // _getSubtitles().then((subtitles) {
+    //   _subtitles = subtitles;
+    //   setState(() {});
+    // });
   }
 
   @override
@@ -140,17 +140,21 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.url != widget.url) {
       _initListeners();
-      _getSubtitles().then((subtitles) {
-        _subtitles = subtitles;
-        setState(() {});
-      });
+      // _getSubtitles().then((subtitles) {
+      //   _subtitles = subtitles;
+      //   setState(() {});
+      // });
     }
   }
 
   void _initListeners() {
-    _videoControllerListener = () {
+    _videoControllerListener = () async {
       if (_isPlayTaped) {
         _isPlaying = true;
+        await _getSubtitles().then((subtitles) {
+          _subtitles = subtitles;
+          setState(() {});
+        });
         _scheduleNextSubtitle();
       } else if (_isPauseTaped) {
         _isPlaying = false;
