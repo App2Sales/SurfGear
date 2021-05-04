@@ -179,16 +179,17 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
         final List<Subtitle> subtitles = parseSrt(subtitleStr);
         return subtitles;
       case SubtitleSource.network:
-        final http.Response response = await http.get(widget.url,
-            headers: {'charset': 'utf-8', 'Accept-Charset': 'utf-8'});
-        if (response.statusCode == 200) {
-          final List<Subtitle> subtitles =
-              parseSrt(utf8.decode(response.bodyBytes));
-          return subtitles;
-        } else {
-          return [];
+        if (widget.url != null) {
+          final http.Response response = await http.get(widget.url,
+              headers: {'charset': 'utf-8', 'Accept-Charset': 'utf-8'});
+          if (response.statusCode == 200) {
+            final List<Subtitle> subtitles =
+                parseSrt(utf8.decode(response.bodyBytes));
+            return subtitles;
+          }
         }
-        break;
+        return [];
+
       case SubtitleSource.file:
         final String content = await _subtitleFile.readAsString(encoding: utf8);
         assert(content != null && content.isNotEmpty);
