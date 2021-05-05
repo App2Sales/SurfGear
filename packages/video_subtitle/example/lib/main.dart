@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
-import 'package:video_player_header/video_player_header.dart';
 import 'package:video_subtitle/video_subtitle.dart';
 
 const videoUrl =
