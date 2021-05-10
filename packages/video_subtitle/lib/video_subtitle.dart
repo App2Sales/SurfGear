@@ -224,6 +224,8 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
         } else {
           _openSubtitle(nextSubtitle);
         }
+      } else {
+        _openSubtitle(Subtitle()..range = Range(0, _subtitles[0].range.begin));
       }
     }
   }
