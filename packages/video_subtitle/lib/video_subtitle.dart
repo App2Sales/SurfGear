@@ -207,20 +207,18 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
     if (_isPlaying) {
       final Subtitle nextSubtitle = _findSubtitle();
 
-      if (nextSubtitle != null) {
-        if (nextSubtitle.range.begin <= _currentDuration &&
-            _currentDuration < nextSubtitle.range.end &&
-            _subtitle == nextSubtitle) {
-          _closeSubtitle(nextSubtitle);
-        } else {
-          _openSubtitle(nextSubtitle);
-        }
+      if (nextSubtitle.range.begin <= _currentDuration &&
+          _currentDuration < nextSubtitle.range.end &&
+          _subtitle == nextSubtitle) {
+        _closeSubtitle(nextSubtitle);
+      } else {
+        _openSubtitle(nextSubtitle);
       }
     }
   }
 
   Future<void> _openSubtitle(Subtitle subtitle) async {
-    if (subtitle != null && _currentDuration < subtitle.range.begin) {
+    if (_currentDuration < subtitle.range.begin) {
       await Future.delayed(
         Duration(milliseconds: subtitle.range.begin - _currentDuration),
       );
@@ -234,7 +232,7 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
   }
 
   Future<void> _closeSubtitle(Subtitle subtitle) async {
-    if (subtitle != null && _currentDuration < subtitle.range.end) {
+    if (_currentDuration < subtitle.range.end) {
       await Future.delayed(
         Duration(milliseconds: subtitle.range.end - _currentDuration),
       );
@@ -253,8 +251,7 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
     Subtitle prevSub;
 
     for (Subtitle sub in _subtitles) {
-      if (sub != null &&
-          sub.range.begin <= _currentDuration &&
+      if (sub.range.begin <= _currentDuration &&
           _currentDuration < sub.range.end) {
         return sub;
       }
