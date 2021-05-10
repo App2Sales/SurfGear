@@ -148,7 +148,11 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
   }
 
   void _initListeners() async {
-    _videoControllerListener = () {
+    _videoControllerListener = () async {
+      _subtitles = await _getSubtitles();
+
+      setState(() {});
+
       if (_isPlayTaped) {
         _isPlaying = true;
 
@@ -160,10 +164,10 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
       }
     };
 
-    await _getSubtitles().then((subtitles) {
-      _subtitles = subtitles;
-      setState(() {});
-    });
+    // await _getSubtitles().then((subtitles) {
+    //   _subtitles = subtitles;
+    //   setState(() {});
+    // });
 
     _videoController.addListener(_videoControllerListener);
   }
