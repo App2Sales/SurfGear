@@ -216,12 +216,14 @@ class _VideoSubtitleState extends State<VideoSubtitle> {
     if (_isPlaying) {
       final Subtitle nextSubtitle = _findSubtitle();
 
-      if (nextSubtitle.range.begin <= _currentDuration &&
-          _currentDuration < nextSubtitle.range.end &&
-          _subtitle == nextSubtitle) {
-        _closeSubtitle(nextSubtitle);
-      } else {
-        _openSubtitle(nextSubtitle);
+      if (nextSubtitle != null) {
+        if (nextSubtitle.range.begin <= _currentDuration &&
+            _currentDuration < nextSubtitle.range.end &&
+            _subtitle == nextSubtitle) {
+          _closeSubtitle(nextSubtitle);
+        } else {
+          _openSubtitle(nextSubtitle);
+        }
       }
     }
   }
